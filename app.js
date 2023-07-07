@@ -8,7 +8,7 @@ const cors = require('cors');
 const { PORT = 3000 } = process.env;
 const db = mongoose.connection;
 
-mongoose.connect('mongodb://127.0.0.1:27017/movies', {
+mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
   useNewUrlParser: true,
 });
 
