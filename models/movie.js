@@ -71,15 +71,6 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  likes: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'User',
-    default: [],
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
 });
 
 module.exports = mongoose.model('Movie', movieSchema);
