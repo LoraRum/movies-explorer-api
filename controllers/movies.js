@@ -5,8 +5,8 @@ const BadRequest = require('../errors/BadRequest');
 
 module.exports.getAllMovie = async (req, res, next) => {
   try {
-    const movie = await Movie.find({}).populate(['owner']);
-    res.json(movie);
+    const movies = await Movie.find({ owner: req.user.id }).populate('owner');
+    res.status(200).json(movies);
   } catch (err) {
     next(err);
   }

@@ -6,9 +6,9 @@ const Unauthorized = require('../errors/Unauthorized');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
+    required: true,
     minlength: 2,
     maxlength: 30,
-    default: 'Laura',
   },
   email: {
     type: String,
