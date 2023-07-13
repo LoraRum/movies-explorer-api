@@ -43,11 +43,6 @@ module.exports.login = async (req, res, next) => {
       expiresIn: '7d',
     });
 
-    res.cookie('jwt', token, {
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
-
     res.status(200).send({ token });
   } catch (error) {
     next(error);
