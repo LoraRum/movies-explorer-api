@@ -53,7 +53,7 @@ const validateCreateMovie = celebrate({
 
 const validateMovieId = celebrate({
   params: Joi.object().keys({
-    MovieId: Joi.string().required().hex().length(24),
+    movieId: Joi.number().required(),
   }),
 });
 

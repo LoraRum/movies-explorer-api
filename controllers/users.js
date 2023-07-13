@@ -34,21 +34,21 @@ module.exports.createUser = async (req, res, next) => {
   }
 };
 
-module.exports.login = async (request, response, next) => {
+module.exports.login = async (req, res, next) => {
   try {
-    const { email, password } = request.body;
+    const { email, password } = req.body;
 
     const user = await User.findUserByCredentials(email, password);
     const token = jwt.sign({ _id: user._id }, secretKey, {
       expiresIn: '7d',
     });
 
-    response.cookie('jwt', token, {
+    res.cookie('jwt', token, {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
 
-    response.send({ token });
+    res.status(200).send({ token });
   } catch (error) {
     next(error);
   }
@@ -65,7 +65,7 @@ module.exports.getCurrentUser = async (req, res, next) => {
       next(new NotFound('User not found'));
     }
 
-    res.send(user);
+    res.status(200).send(user);
   } catch (error) {
     next(error);
   }
@@ -82,7 +82,7 @@ module.exports.updateProfile = async (req, res, next) => {
     );
 
     if (updatedUser) {
-      res.send(updatedUser);
+      res.status(200).send(updatedUser);
     } else {
       next(new NotFound('User not found'));
     }
