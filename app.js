@@ -6,21 +6,18 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { errors } = require('celebrate');
 
-const { login, createUser } = require('./controllers/users');
-const {
-  signInValidation,
-  signUpValidation,
-} = require('./middlewares/validation');
-const auth = require('./middlewares/auth');
-const users = require('./routes/users');
-const movies = require('./routes/movies');
-const { NotFound } = require('./errors/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const router = require('./routes');
 
-const { PORT = 3000 } = process.env;
+const {
+  PORT = 3000,
+  DB_HOST = '127.0.0.1',
+  DB_PORT = '27017',
+  DB_NAME = 'bitfilmsdb',
+} = process.env;
 const db = mongoose.connection;
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`, {
   useNewUrlParser: true,
 });
 
@@ -35,22 +32,7 @@ db.once('open', () => {
   app.use(cors());
   app.use(requestLogger);
 
-  app.get('/crash-test', () => {
-    setTimeout(() => {
-      throw new Error('Сервер сейчас упадёт');
-    }, 0);
-  });
-
-  app.post('/signin', signInValidation, login);
-  app.post('/signup', signUpValidation, createUser);
-
-  app.use(auth);
-  app.use('/users', users);
-  app.use('/movies', movies);
-
-  app.use((req, res, next) => {
-    next(new NotFound('Route not found'));
-  });
+  app.use(router);
 
   app.use(errorLogger);
   app.use(errors());
