@@ -84,6 +84,11 @@ module.exports.updateProfile = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new BadRequest('Incorrect data passed during profile update'));
+    } else if (
+      err.name === 'MongoServerError' &&
+      err.codeName === 'DuplicateKey'
+    ) {
+      next(new ConflictError('This user already exists'));
     } else {
       next(err);
     }
