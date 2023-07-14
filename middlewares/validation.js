@@ -22,7 +22,7 @@ const validateUpdateProfile = celebrate({
 
 const signUpValidation = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
@@ -53,7 +53,7 @@ const validateCreateMovie = celebrate({
 
 const validateMovieId = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.number().required(),
+    id: Joi.string().length(24).hex().required(),
   }),
 });
 

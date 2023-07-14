@@ -30,18 +30,18 @@ module.exports.createMovie = async (req, res, next) => {
 
 module.exports.deleteMovieById = async (req, res, next) => {
   try {
-    const { movieId } = req.params;
-    const movie = await Movie.findOne({ movieId });
+    const { id } = req.params;
+    const movie = await Movie.findById(id);
 
     if (!movie) {
-      next(new NotFound('Card not found'));
+      next(new NotFound('Movie not found'));
     } else if (movie.owner.toString() !== req.user._id) {
       next(new Forbidden('Deletion is not permitted'));
     } else {
-      const deletedMovie = await Movie.findOneAndDelete({ movieId });
+      const deletedMovie = await Movie.findByIdAndDelete(id);
 
       if (!deletedMovie) {
-        next(new NotFound('Card not found'));
+        next(new NotFound('Movie not found'));
       } else {
         res.status(200).json(deletedMovie);
       }
